@@ -1,0 +1,105 @@
+﻿Using System
+Using System.Data
+Using System.Configuration
+Using System.Web
+Using System.Web.Security
+Using System.Web.UI
+Using System.Web.UI.WebControls
+Using System.Web.UI.WebControls.WebParts
+Using System.Web.UI.HtmlControls
+Using System.Collections.Generic
+
+BegClass CustomerList Access(*Public) Implements(IHttpHandler)
+    DclDB pgmDB DBName( "*Public/DG Net Local" ) 
+
+    BegSr ProcessRequest Access( *Public ) Implements( IHttpHandler.ProcessRequest )
+        DclSrParm Context Type( HttpContext )
+
+        DclFld Package        Type( CustomerListPackage )
+        DclFld FirstLetter    Type( *String ) 
+        DclFld Name           Type( *String ) 
+        DclFld Number         Type( *String )  
+		DclFld CustomerNumber Type( *Integer4 ) 
+
+        Context.Response.ContentType = "text/plain"            
+        
+        If ( Context.Request.QueryString.Keys.Count = 0 )
+            Context.Response.Write( GetFirstRecords() )
+
+        ElseIf ( Context.Request[ "firstletter" ] <> *Nothing )
+            FirstLetter = Context.Request[ "firstletter" ].ToString()
+            Context.Response.Write( GetRecorsdByFirstLetter( FirstLetter ) )
+            
+        ElseIf ( Context.Request[ "salesfor" ] <> *Nothing )
+            CustomerNumber = Context.Request[ "salesfor" ].ToString()
+            Context.Response.Write( GetSalesInfo( CustomerNumber ) )
+
+        Else                 
+            Context.Response.Write( "<p><a href='GetCustomers.ashx?name=x'>Get customer array.</a></p>" )
+        EndIf        
+    EndSr
+
+    BegFunc GetFirstRecords Type( *String ) 
+        DclFld Package  Type( CustomerListPackage ) 
+        DclFld o        Type( CustomerByNameList ) 
+        DclFld Json     Type( *String )
+         
+        o = *New CustomerByNameList( pgmDB, 12 ) 
+        
+        o.OpenData()
+        Package = o.GetFirstRecords() 
+        o.CloseData()
+            
+        Json = NewtonSoft.Json.JsonConvert.SerializeObject( Package, NewtonSoft.Json.Formatting.Indented )
+            
+        Disconnect pgmDB
+
+        LeaveSr Json
+    EndFunc 
+
+    BegFunc GetRecorsdByFirstLetter Type( *String )
+        DclSrParm FirstLetter Type( *String ) 
+     
+        DclFld Json     Type( *String )
+        DclFld Package  Type( CustomerListPackage ) 
+        DclFld o        Type( CustomerByNameList ) 
+
+        o = *New CustomerByNameList( pgmDB, 12 ) 
+        
+        o.OpenData()
+        Package = o.GetListByFirstLetter( FirstLetter ) 
+        o.CloseData()
+            
+        Json = NewtonSoft.Json.JsonConvert.SerializeObject( Package, NewtonSoft.Json.Formatting.Indented )
+            
+        Disconnect pgmDB
+
+        LeaveSr Json
+    EndFunc 
+
+    BegFunc GetSalesInfo Type( *String )
+        DclSrParm CustomerNumber Type( *Integer4 ) 
+     
+        DclFld Json     Type( *String )
+		DclFld Sales    Type( List( *Of Entity.SalesBuffer ) )
+        DclFld o        Type( CustomerSalesInfo ) 
+
+        o = *New CustomerSalesInfo( pgmDB ) 
+        
+        Sales = o.GetMonthlySales( CustomerNumber ) 
+            
+        Json = NewtonSoft.Json.JsonConvert.SerializeObject( Sales, NewtonSoft.Json.Formatting.Indented )
+            
+        Disconnect pgmDB
+
+        LeaveSr Json
+    EndFunc 
+
+
+    BegProp IsReusable Type( *Boolean ) Access( *Public ) Implements( IHttpHandler.IsReusable )
+        BegGet
+            LeaveSr *False
+        EndGet
+    EndProp
+
+EndClass

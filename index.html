@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AVR-KO</title>
+    <link rel="stylesheet" href="assets/vendor/zurb/css/foundation.css" />
+    <link rel="stylesheet" href="assets/vendor/zurb/css/app.css" />
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">    
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+
+    <style>
+        table a {
+            color: black;
+        }
+
+        .title-bar-button {
+            margin: 0;
+            font-size: 1rem;
+            /*padding: 0.85em 1em;*/
+            /*padding: 0.30em 0.35em;*/
+            padding: 0.35em 0.45em 0.20em 0.45em;
+
+        }
+        .title-bar-button-icon {
+            font-size: 260%;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="container-letter-list">
+        <div class="title-bar">
+            <div class="title-bar-left">
+                <button type="button" class="secondary tiny button title-bar-button" data-app-action="home" data-toggle="offCanvasLeft"><i class="fa fa-bars title-bar-button-icon"></i></button>
+                <span class="title-bar-title">AVR-KO</span>
+            </div>
+            <div class="title-bar-right">
+    <!--            <button class="secondary tiny button title-bar-button" type="button"><i class="fa fa-arrow-circle-o-left title-bar-button-icon"></i></button>-->
+            </div>
+        </div>
+        <table>
+            <tbody data-bind="foreach: letters">
+                <tr>
+                    <td>
+                        <a href="#" class="alpha-select" style="display:block; width:100%">
+                            <div style="float:left; width:95%"
+                                data-bind="{text: $data, attr: { 'data-letter': $data}}"></div>
+                            <div style="float:right; width:5%">
+                                <i class="fa fa-chevron-right"></i></div>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="container-customer-list">
+        <div class="title-bar">
+            <div class="title-bar-left">
+                <button type="button" class="secondary tiny button title-bar-button" data-app-action="home" data-toggle="offCanvasLeft"><i class="fa fa-chevron-left title-bar-button-icon"></i></button>
+                <span class="title-bar-title">AVR-KO</span>
+            </div>
+            <div class="title-bar-right">
+                <!--<button class="secondary tiny button title-bar-button" type="button"><i class="fa fa-arrow-circle-o-left title-bar-button-icon"></i></button>-->
+            </div>
+        </div>
+        <table>
+            <tbody data-bind="foreach: customers">
+                <tr>
+                    <td><span data-bind="text: number"></span></td>
+                    <td><div style="float:left; width:95%"
+                        data-bind="text: name"></div>
+                        <div style="float:right; width:5%">
+                            <i class="fa fa-chevron-right"></i></div>
+                    </td>
+                </tr>
+          </tbody>
+        </table>
+    </div>
+</body>
+
+<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
+<script src="assets/vendor/zurb/js/foundation.min.js"></script>
+<script src="assets/vendor/zurb/js/app.js"></script>
+<script src="assets/vendor/knockout/dist/knockout.js"></script>
+<script src="assets/vendor/underscore/underscore.js"></script>
+<script src="assets/js/index.html.js"></script>
+
+
+</html>

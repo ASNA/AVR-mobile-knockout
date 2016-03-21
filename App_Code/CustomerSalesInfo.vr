@@ -1,0 +1,177 @@
+﻿Using System
+Using System.Data 
+Using System.Collections 
+Using System.Collections.Generic
+
+BegClass CustomerSalesInfo Access(*Public)
+    DclDB pgmDB DBName( "*Public/DG NET Local" ) 
+
+    DclDiskFile  SalesByCust                      +
+          Type( *Input  )                         + 
+          Org( *Indexed )                         + 
+          Prefix( Sales_ )                        + 
+          File( "Examples/CSMasterL1" )           +
+          DB( pgmDB )                             +
+          RnmFmt( SALESFORMAT )                   + 
+          ImpOpen( *No )                           
+          
+    DclArray SalesArr             Type( *Packed   ) Len( 11, 2 ) Dim( 12 )           
+    DclArray GrandTotal           Type( *Integer4 ) Dim( 13 ) 
+    
+    // Assign 12 contiguous fields from Sales to 
+    // Sales array, starting at field Sales_CSSales01. 
+    DclAliasGroup SalesArr Flds( Sales_CSSales01 ) +
+                           Fmt( SALESFORMAT )      +
+                           Count( 12 ) 
+                         
+    BegSr OpenData 
+        //
+        // Open DB and disk files.
+        //
+        If ( NOT pgmDB.IsOpen ) 
+            Connect pgmDB 
+        EndIf 
+        If ( NOT SalesByCust.IsOpen ) 
+            Open SalesByCust
+        EndIf             
+    EndSr                           
+    
+    BegSr CloseData
+        //
+        // Close disk files.
+        //
+        Close SalesByCust
+    EndSr 
+    
+    BegFunc GetMonthlySales Type( List( *Of Entity.SalesBuffer ) ) Access( *Public ) 
+        //
+        // Get the monthly sales for a given customer number and year.
+        //
+        DclSrParm CustNo Type( *Integer4 )
+	
+		DclFld SalesBuffer Type( Entity.SalesBuffer ) 
+        DclFld Sales       Type( List( *Of Entity.SalesBuffer ) ) New()
+
+        OpenData()
+
+		Sales_CSCustNo = CustNo 
+        SetRange SalesByCust FirstKey( CustNo )   
+		
+		If ( Sales_CSCustNo = CustNo )
+			Sales = CollectSales()
+			SaveSalesTotals( Sales, Sales_CSCustNo  )
+		EndIf
+
+		CloseData()
+
+		LeaveSr Sales
+    EndFunc                                    
+
+	BegSr SaveSalesTotals
+		DclSrParm Sales  Type( List( *Of Entity.SalesBuffer ) ) 
+		DclSrParm CustNo Type( *Integer4 ) 
+
+	    DclFld Buffer      Type( Entity.SalesBuffer ) New()
+
+		GrandTotal[ 12 ] = %XFoot( GrandTotal ) 
+
+		Buffer.number    = CustNo
+		Buffer.year      = 'Total'
+		Buffer.type      = 3
+		Buffer.jan       = GrandTotal[ 0 ]
+		Buffer.feb       = GrandTotal[ 1 ]
+		Buffer.mar       = GrandTotal[ 2 ]
+		Buffer.apr       = GrandTotal[ 3 ]
+		Buffer.may       = GrandTotal[ 4 ]
+		Buffer.jun       = GrandTotal[ 5 ]
+		Buffer.jul       = GrandTotal[ 6 ]
+		Buffer.aug       = GrandTotal[ 7 ]
+		Buffer.sep       = GrandTotal[ 8 ]
+		Buffer.oct       = GrandTotal[ 9 ]
+		Buffer.nov       = GrandTotal[ 10 ]
+		Buffer.dec       = GrandTotal[ 11 ]
+		Buffer.total     = GrandTotal[ 12 ]
+		Sales.Add( Buffer ) 
+
+		GrandTotal = 0
+	EndSr 
+	    
+    BegFunc CollectSales Type( List( *Of Entity.SalesBuffer ) )
+        DclFld Sales Type( List( *Of Entity.SalesBuffer ) ) New()
+		DclFld Buffer Type( Entity.SalesBuffer ) 
+        //
+        // Read the sales detail file from the current record position
+        // to end of file. Note that end of file may be virtual if 
+        // a SetRange had previously been used to position the record 
+        // pointer.
+        //
+        
+        DclArray RoundedSales   Type( *Integer4 ) Dim( 13 ) 
+        DclArray AccumSales     Type( *Integer4 ) Dim( 13 ) 
+        
+        Read SalesByCust 
+        DoWhile ( NOT SalesByCust.IsEof )         
+			Buffer = *New Entity.SalesBuffer()
+
+            Mult F1( 1 ) F2( SalesArr ) Result( RoundedSales ) Adj( *RndUp ) 
+			AccumSales = AccumSales + GrandTotal
+
+			Buffer.number    = Sales_CSCustNo 
+			Buffer.year      = ( Sales_CSYear + 4 ).ToString()
+			Buffer.type      = Sales_CSType
+			Buffer.jan       = SalesArr[ 0 ]
+			Buffer.feb       = SalesArr[ 1 ]
+			Buffer.mar       = SalesArr[ 2 ]
+			Buffer.apr       = SalesArr[ 3 ]
+			Buffer.may       = SalesArr[ 4 ]
+			Buffer.jun       = SalesArr[ 5 ]
+			Buffer.jul       = SalesArr[ 6 ]
+			Buffer.aug       = SalesArr[ 7 ]
+			Buffer.sep       = SalesArr[ 8 ]
+			Buffer.oct       = SalesArr[ 9 ]
+			Buffer.nov       = SalesArr[ 10 ]
+			Buffer.dec       = SalesArr[ 11 ]
+			Buffer.total     = %XFoot( SalesArr )
+
+			GrandTotal = GrandTotal + SalesArr
+
+
+			Sales.Add( Buffer ) 
+
+            Read SalesByCust 
+        EndDo         
+
+		LeaveSr Sales 
+    EndFunc 
+
+
+    BegConstructor Access( *Public ) 
+        DclSrParm pgmDB Type( ASNA.VisualRPG.Runtime.Database ) 
+        
+        *This.pgmDB = pgmDB        
+    EndConstructor 
+EndClass    
+
+
+//    BegSr CollectSales
+//        //
+//        // Read the sales detail file from the current record position
+//        // to end of file. Note that end of file may be virtual if 
+//        // a SetRange had previously been used to position the record 
+//        // pointer.
+//        //
+//        
+//        DclArray RoundedSales   Type( *Integer4 ) Dim( 13 ) 
+//        DclArray RoundedReturns Type( *Integer4 ) Dim( 13 ) 
+//        
+//        Read SalesByCust 
+//        DoWhile ( NOT SalesByCust.IsEof )         
+//            Mult F1( 1 ) F2( SalesArr ) Result( RoundedSales ) Adj( *RndUp ) 
+//
+//            WriteSalesDataRow( SalesByCust_CSCustNo, +
+//                               SalesByCust_CSYear,   +
+//                               SalesByCust_CSType,   +
+//                               RoundedSales )
+//            Read SalesByCust 
+//        EndDo         
+//    EndSr

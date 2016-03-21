@@ -1,0 +1,223 @@
+﻿DclNameSpace Entity
+
+BegClass SalesBuffer Access( *Public ) 
+	DclFld number Type( *Integer4 ) Access( *Public ) 
+	DclFld year   Type( *String ) Access( *Public ) 
+	DclFld type   Type( *Integer4 ) Access( *Public ) 
+	DclFld jan    Type( *Integer4 ) Access( *Public ) 
+	DclFld feb    Type( *Integer4 ) Access( *Public ) 
+	DclFld mar    Type( *Integer4 ) Access( *Public ) 
+	DclFld apr    Type( *Integer4 ) Access( *Public ) 
+	DclFld may    Type( *Integer4 ) Access( *Public ) 
+	DclFld jun    Type( *Integer4 ) Access( *Public ) 
+	DclFld jul    Type( *Integer4 ) Access( *Public ) 
+	DclFld aug    Type( *Integer4 ) Access( *Public ) 
+	DclFld sep    Type( *Integer4 ) Access( *Public ) 
+	DclFld oct    Type( *Integer4 ) Access( *Public ) 
+	DclFld nov    Type( *Integer4 ) Access( *Public ) 
+	DclFld dec    Type( *Integer4 ) Access( *Public ) 
+	DclFld total  Type( *Integer4 ) Access( *Public ) 
+
+
+//
+//
+//
+//
+//
+//
+//
+//	// ----------------------------------------------
+//	// CSCustNo property.
+//	// ----------------------------------------------
+//	DclFld _CSCustNo Type( *Packed ) Len( 9,0 )
+//	BegProp number Type( *Packed ) Len( 9,0 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSCustNo
+//		EndGet
+//		BegSet
+//			_CSCustNo = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSYear property.
+//	// ----------------------------------------------
+//	DclFld _CSYear Type( *Zoned ) Len( 4,0 )
+//	BegProp year Type( *Zoned ) Len( 4,0 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSYear
+//		EndGet
+//		BegSet
+//			_CSYear = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSType property.
+//	// ----------------------------------------------
+//	DclFld _CSType Type( *Zoned ) Len( 1,0 )
+//	BegProp saletype Type( *Zoned ) Len( 1,0 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSType
+//		EndGet
+//		BegSet
+//			_CSType = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales01 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales01 Type( *Packed ) Len( 11,2 )
+//	BegProp jan Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales01
+//		EndGet
+//		BegSet
+//			_CSSales01 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales02 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales02 Type( *Packed ) Len( 11,2 )
+//	BegProp feb Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales02
+//		EndGet
+//		BegSet
+//			_CSSales02 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales03 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales03 Type( *Packed ) Len( 11,2 )
+//	BegProp mar Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales03
+//		EndGet
+//		BegSet
+//			_CSSales03 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales04 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales04 Type( *Packed ) Len( 11,2 )
+//	BegProp apr Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales04
+//		EndGet
+//		BegSet
+//			_CSSales04 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales05 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales05 Type( *Packed ) Len( 11,2 )
+//	BegProp may Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales05
+//		EndGet
+//		BegSet
+//			_CSSales05 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales06 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales06 Type( *Packed ) Len( 11,2 )
+//	BegProp jun Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales06
+//		EndGet
+//		BegSet
+//			_CSSales06 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales07 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales07 Type( *Packed ) Len( 11,2 )
+//	BegProp jul Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales07
+//		EndGet
+//		BegSet
+//			_CSSales07 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales08 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales08 Type( *Packed ) Len( 11,2 )
+//	BegProp aug Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales08
+//		EndGet
+//		BegSet
+//			_CSSales08 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales09 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales09 Type( *Packed ) Len( 11,2 )
+//	BegProp sep Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales09
+//		EndGet
+//		BegSet
+//			_CSSales09 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales10 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales10 Type( *Packed ) Len( 11,2 )
+//	BegProp oct Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales10
+//		EndGet
+//		BegSet
+//			_CSSales10 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales11 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales11 Type( *Packed ) Len( 11,2 )
+//	BegProp nov Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales11
+//		EndGet
+//		BegSet
+//			_CSSales11 = *PropVal
+//		EndSet
+//	EndProp
+//
+//	// ----------------------------------------------
+//	// CSSales12 property.
+//	// ----------------------------------------------
+//	DclFld _CSSales12 Type( *Packed ) Len( 11,2 )
+//	BegProp dec Type( *Packed ) Len( 11,2 ) Access( *Public )
+//		BegGet
+//			LeaveSr _CSSales12
+//		EndGet
+//		BegSet
+//			_CSSales12 = *PropVal
+//		EndSet
+//	EndProp
+EndClass

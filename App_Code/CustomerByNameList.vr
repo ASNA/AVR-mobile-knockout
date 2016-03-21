@@ -1,0 +1,178 @@
+﻿Using System
+Using System.Data
+Using System.Collections.Generic
+Using System.Configuration
+Using System.Web
+Using System.Web.Security
+Using System.Web.UI
+Using System.Web.UI.WebControls
+Using System.Web.UI.WebControls.WebParts
+Using System.Web.UI.HtmlControls
+
+BegClass CustomerByNameList Access(*Public)
+
+    DclDB pgmDB DBName( "*PUBLIC/DG Net Local" ) 
+
+    DclDiskFile  Customer +
+          Type( *Input  ) +
+          Org( *Indexed ) +
+          Prefix( Customer_ ) +
+          File( "Examples/CMastNewL2" ) +
+          DB( pgmDB ) +
+          ImpOpen( *No )
+
+    DclFld RecordsToRead Type( *Integer4 )
+
+    BegSr OpenData Access( *Public )
+        //
+        // Connect the DB object and open files.
+        //
+        If ( NOT pgmDB.IsOpen )
+            Connect pgmDB
+        EndIf
+        Open Customer
+    EndSr
+
+    BegSr CloseData Access( *Public )
+        //
+        // Close files.
+        // This method _must_ be called before the parent class goes out
+        // of scope.
+        //
+        Close *All
+    EndSr
+
+    BegConstructor Access(*Public)
+        //
+        // Class constructor. Receives an ASNA Database object and
+        // the number of records to read.
+        //
+        DclSrParm pgmDB         Type( ASNA.VisualRPG.Runtime.Database )
+        DclSrParm RecordsToRead Type( *Integer4 )
+
+        *This.pgmDB = pgmDB
+        *This.RecordsToRead = RecordsToRead
+    EndConstructor
+
+    BegFunc GetListByFirstLetter Type( CustomerListPackage ) Access( *Public ) 
+        //
+        // Return a DataTable populated with records starting at
+        // the current file position.
+        //
+        DclSrParm FirstLetter Type( *String ) 
+
+        DclFld Customers Type( List( *Of Entity.Customer ) ) New()
+        DclFld Buffer    Type( Entity.Customer ) 
+        DclFld Package   Type( CustomerListPackage ) New()
+        DclFld Counter   Type( *Integer4 ) 
+
+        SetLL Customer Key( FirstLetter.ToUpper() ) 
+        Read  Customer 
+        DoWhile ( Customer_CMName.Substring( 0, 1 ) = FirstLetter.ToUpper() ) 
+            Buffer = *New Entity.Customer()
+            Buffer.index = Counter
+            Counter = Counter + 1
+            PopulateBuffer( Buffer )
+            Customers.Add( Buffer )  
+
+            Read Customer 
+            If ( Customer.IsEof )
+                Leave
+            EndIf
+        EndDo 
+
+        Package.Customers = Customers.ToArray()
+        Package.Count = Package.Customers.Length 
+        If ( Package.Customers.Length > 0 ) 
+            Package.Name = Buffer.name
+            Package.Number = Buffer.number
+        EndIf 
+
+        LeaveSr Package 
+    EndFunc
+
+    BegFunc GetList Type( CustomerListPackage )
+        //
+        // Return a DataTable populated with records starting at
+        // the current file position.
+        //
+        DclFld Customers Type( List( *Of Entity.Customer ) ) New()
+        DclFld Buffer    Type( Entity.Customer ) 
+        DclFld Package   Type( CustomerListPackage ) New()
+        DclFld Counter   Type( *Integer4 ) 
+
+        DclArray Result  Type( Entity.Customer ) Rank( 1 ) 
+
+        Do FromVal( 1 ) ToVal( *This.RecordsToRead )
+            Read Customer
+            If ( Customer.IsEof )
+                Leave
+            EndIf
+            Buffer = *New Entity.Customer()
+            Buffer.index = Counter
+            Counter = Counter + 1
+            PopulateBuffer( Buffer )
+            Customers.Add( Buffer )  
+        EndDo
+
+        Package.Customers = Customers.ToArray()
+        Package.Count = Package.Customers.Length 
+        If ( Package.Customers.Length > 0 ) 
+            Package.Name = Buffer.name
+            Package.Number = Buffer.number
+        EndIf 
+        LeaveSr Package 
+    EndFunc
+
+    BegFunc GetFirstRecords Type( CustomerListPackage ) Access( *Public ) 
+        //
+        // Return DataTable with the 'First' group of rows.
+        //
+        SetLL Customer Key( *Start )
+
+        LeaveSr GetList()
+    EndFunc
+
+    BegFunc GetPositionToRecords Type( CustomerListPackage ) Access( *Public ) 
+        //
+        // Return DataTable with rows starting at the specified position.
+        //
+        DclSrParm CustomerName    Type( *String )
+        DclSrParm CustomerNumber  Type( *Integer4 )
+
+        DclFld Result Type( CustomerListPackage ) 
+
+        Customer_CMName    = CustomerName
+        Customer_CMCustNo  = CustomerNumber
+
+        // Set lower limits at key values provided.
+        SetLL Customer Key( Customer_CMName, Customer_CMCustNo ) 
+        Result = GetList()                        
+
+        // SetLL failed when trying to position to a given 
+        // record for the PositionTo operation. 
+        If ( CustomerNumber = 0 AND NOT Customer.IsFound ) 
+            Result = *Nothing
+        EndIf
+
+        LeaveSr Result 
+    EndFunc
+
+    BegSr PopulateBuffer
+        DclSrParm Buffer Type( Entity.Customer )
+
+        Buffer.number     = Customer_CMCustNo
+        Buffer.name       = Customer_CMName.Trim()  
+        Buffer.address    = Customer_CMAddr1.Trim() 
+        Buffer.city       = Customer_CMCity.Trim()  
+        Buffer.state      = Customer_CMState.Trim() 
+        Buffer.country    = Customer_CMCntry.Trim() 
+        Buffer.postalcode = Customer_CMPostCode.Trim()
+        Buffer.active     = Customer_CMActive.Trim()
+        Buffer.fax        = Customer_CMFax.ToString( "(000) 000-0000" )    
+        Buffer.phone      = Customer_CMPhone.Trim() 
+    EndSr
+
+EndClass
+
+

@@ -1,0 +1,138 @@
+﻿DclNameSpace Entity
+
+BegClass Customer Access( *Public )
+    // ----------------------------------------------
+    // CMCustNo property.
+    // ----------------------------------------------
+
+    DclFld index Type( *Integer4 ) Access( *Public ) 
+
+    DclFld _CMCustNo Type( *Integer4 )
+    BegProp number Type( *Integer4 ) Access( *Public )
+        BegGet
+            LeaveSr _CMCustNo
+        EndGet
+        BegSet
+            _CMCustNo = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMName property.
+    // ----------------------------------------------
+    DclFld _CMName Type( System.String )
+    BegProp name Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMName
+        EndGet
+        BegSet
+            _CMName = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMAddr1 property.
+    // ----------------------------------------------
+    DclFld _CMAddr1 Type( System.String )
+    BegProp address Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMAddr1
+        EndGet
+        BegSet
+            _CMAddr1 = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMCity property.
+    // ----------------------------------------------
+    DclFld _CMCity Type( System.String )
+    BegProp city Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMCity
+        EndGet
+        BegSet
+            _CMCity = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMState property.
+    // ----------------------------------------------
+    DclFld _CMState Type( System.String )
+    BegProp state Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMState
+        EndGet
+        BegSet
+            _CMState = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMCntry property.
+    // ----------------------------------------------
+    DclFld _CMCntry Type( System.String )
+    BegProp country Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMCntry
+        EndGet
+        BegSet
+            _CMCntry = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMPostCode property.
+    // ----------------------------------------------
+    DclFld _CMPostCode Type( System.String )
+    BegProp postalcode Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMPostCode
+        EndGet
+        BegSet
+            _CMPostCode = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMActive property.
+    // ----------------------------------------------
+    DclFld _CMActive Type( System.String )
+    BegProp active Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMActive
+        EndGet
+        BegSet
+            _CMActive = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMFax property.
+    // ----------------------------------------------
+    DclFld _CMFax Type( System.String )
+    BegProp fax Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMFax
+        EndGet
+        BegSet
+            _CMFax = *PropVal
+        EndSet
+    EndProp
+
+    // ----------------------------------------------
+    // CMPhone property.
+    // ----------------------------------------------
+    DclFld _CMPhone Type( System.String )
+    BegProp phone Type( System.String ) Access( *Public )
+        BegGet
+            LeaveSr _CMPhone
+        EndGet
+        BegSet
+            _CMPhone = *PropVal
+        EndSet
+    EndProp
+
+EndClass
+

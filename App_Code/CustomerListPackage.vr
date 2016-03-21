@@ -1,0 +1,21 @@
+﻿Using System
+Using System.Data
+Using System.Configuration
+Using System.Web
+Using System.Web.Security
+Using System.Web.UI
+Using System.Web.UI.WebControls
+Using System.Web.UI.WebControls.WebParts
+Using System.Web.UI.HtmlControls
+
+/// <summary>
+/// Summary description for CustomerListPackage
+/// </summary>
+BegClass CustomerListPackage Access(*Public)
+
+    DclArray customers     Type( Entity.Customer ) Rank( 1 ) Access( *Public )
+    DclFld   count         Type( *Integer4 )  Access( *Public ) 
+    DclFld   name          Type( *String ) Access( *Public ) Inz( "" ) 
+    DclFld   number        Type( *Integer4 ) Access( *Public ) 
+    
+EndClass
